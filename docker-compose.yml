@@ -1,0 +1,23 @@
+version: "2.4"
+
+services:
+  phoxicontrol:
+    image: photoneo/phoxicontrol
+    runtime: nvidia
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix
+      - /var/run/dbus:/var/run/dbus
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - DISPLAY
+      - DOCKER=1
+      - QT_X11_NO_MITSHM=1
+      - SHELL
+    stop_signal: SIGINT
+    security_opt:
+      - apparmor=unconfined
+    logging:
+      driver: journald
+      options:
+        tag: '{{.ImageID}}/{{.Name}}/{{.ID}}'
