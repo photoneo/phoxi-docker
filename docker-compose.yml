@@ -1,9 +1,17 @@
-version: "2.4"
+---
+
+version: "3.6"
 
 services:
   phoxicontrol:
-    image: photoneo/phoxicontrol
-    runtime: nvidia
+    build:
+      context: ./context
+      dockerfile: $PWD/Dockerfile
+      # args:
+      #   buildno: 1
+    image: photoneo/phoxicontrol:latest
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
       - /tmp/.X11-unix/:/tmp/.X11-unix
       - /var/run/dbus:/var/run/dbus
@@ -14,7 +22,7 @@ services:
       - DOCKER=1
       - QT_X11_NO_MITSHM=1
       - SHELL
-    stop_signal: SIGINT
+    stop_signal: SIGKILL
     security_opt:
       - apparmor=unconfined
     logging:
