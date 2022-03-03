@@ -1,0 +1,31 @@
+---
+
+version: "3.6"
+
+services:
+  phoxicontrol:
+    build:
+      context: ./context
+      dockerfile: $PWD/Dockerfile
+      # args:
+      #   buildno: 1
+    image: photoneo/phoxicontrol:latest
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix
+      - /var/run/dbus:/var/run/dbus
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - DISPLAY
+      - DOCKER=1
+      - QT_X11_NO_MITSHM=1
+      - SHELL
+    stop_signal: SIGKILL
+    security_opt:
+      - apparmor=unconfined
+    logging:
+      driver: journald
+      options:
+        tag: '{{.ImageID}}/{{.Name}}/{{.ID}}'
